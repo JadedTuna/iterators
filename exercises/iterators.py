@@ -86,8 +86,9 @@ class Alphabet():
     """
     def __init__(self):
         self.names = ["Alef", "Bet", "Gimel", "Dalet", "He", "Vav", "Zayin",
-            "Het", "Tet", "Yod", "Kaf", "Lamed", "Mem", "Nun", "Samekh",
-            "Ayin", "Pe", "Tsadi", "Qof", "Resh", "Shin", "Tav"]
+                      "Het", "Tet", "Yod", "Kaf", "Lamed", "Mem", "Nun",
+                      "Samekh", "Ayin", "Pe", "Tsadi", "Qof", "Resh", "Shin",
+                      "Tav"]
         self.index = 0
 
     def __iter__(self):
@@ -161,11 +162,11 @@ class LookAndSay():
             if char == num:
                 count += 1
             else:
-                if not num is None:
+                if num is not None:
                     new_chars += str(count) + str(num)
                 num = char
                 count = 1
-        
+
         if count:
             new_chars += str(count) + str(num)
 
