@@ -1,4 +1,5 @@
 """Övningar på iterators."""
+import itertools
 
 
 class Cubes():
@@ -10,7 +11,16 @@ class Cubes():
     Talserien ska inte ha något slut.
 
     """
-    pass
+    def __init__(self):
+        self.current = 1
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        cube = self.current ** 3
+        self.current += 1
+        return cube
 
 
 class Primes():
@@ -19,7 +29,24 @@ class Primes():
     Talserien som förväntas börjar alltså: 2, 3, 5, 7, 11, 13, 17, 19, 23, ...
 
     """
-    pass
+    def __init__(self):
+        self.current = 1
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while True:
+            self.current += 1
+            if Primes.is_prime(self.current):
+                return self.current
+
+    @staticmethod
+    def is_prime(value):
+        for i in range(2, value):
+            if value % i == 0:
+                return False
+        return True
 
 
 class Fibonacci():
@@ -31,7 +58,20 @@ class Fibonacci():
     Alltså börjar serien: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...
 
     """
-    pass
+    def __init__(self):
+        self.a = 0
+        self.b = 1
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        c = self.a
+        old_a = self.a
+        self.a = self.b
+        self.b = old_a + self.b
+
+        return c
 
 
 class Alphabet():
@@ -44,6 +84,37 @@ class Alphabet():
     Nun, Samekh, Ayin, Pe, Tsadi, Qof, Resh, Shin, Tav
 
     """
+    def __init__(self):
+        self.names = ["Alef", "Bet", "Gimel", "Dalet", "He", "Vav", "Zayin",
+            "Het", "Tet", "Yod", "Kaf", "Lamed", "Mem", "Nun", "Samekh",
+            "Ayin", "Pe", "Tsadi", "Qof", "Resh", "Shin", "Tav"]
+        self.index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index == len(self.names):
+            raise StopIteration
+
+        name = self.names[self.index]
+        self.index += 1
+        return name
+
+
+class Permutations_IterTools():
+    """En iterator som returnerar alla permutationer av en inmatad sträng.
+
+    Då strängen 'abc' matas in fås: 'abc', 'acb', 'bac', 'bca', 'cba', 'cab'
+    """
+    def __init__(self, string=""):
+        self.permutations = itertools.permutations(string, len(string))
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return "".join(next(self.permutations))
 
 
 class Permutations():
@@ -51,7 +122,14 @@ class Permutations():
 
     Då strängen 'abc' matas in fås: 'abc', 'acb', 'bac', 'bca', 'cba', 'cab'
     """
-    pass
+    def __init__(self, string=""):
+        self.permutations = itertools.permutations(string, len(string))
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return "".join(next(self.permutations))
 
 
 class LookAndSay():
@@ -66,4 +144,34 @@ class LookAndSay():
     1211 läses 'en etta, en tvåa, två ettor', alltså 111221
     111221 läses 'tre ettor, två tvåor, en etta', alltså 312211
     """
-    pass
+    def __init__(self):
+        self.last = 1
+
+    def __iter__(self):
+        return self
+
+    @staticmethod
+    def look_and_say(number):
+        chars = str(number)
+        num = None
+        count = 0
+        new_chars = ""
+        for char in chars:
+            print(char)
+            if char == num:
+                count += 1
+            else:
+                if not num is None:
+                    new_chars += str(count) + str(num)
+                num = char
+                count = 1
+        
+        if count:
+            new_chars += str(count) + str(num)
+
+        return int(new_chars)
+
+    def __next__(self):
+        saved = self.last
+        self.last = self.look_and_say(self.last)
+        return saved
